@@ -1,0 +1,170 @@
+title:
+        NESM1km from 20181206
+time_stepping: NTIMES   dt[sec]  NDTFAST  NINFO
+                842400      20     20      1
+S-coord: THETA_S,   THETA_B,    Hc (m)
+           5.0d0      1.d0      30.0d0
+grid:  filename
+                          ./grd.nc
+forcing: filename
+                          ./NESM_frc.nc
+bulk_forcing: filename
+                          ./NESM_blk.nc
+climatology: filename
+                          ROMS_FILES/roms_clm.nc
+boundary: filename
+                          ./NESM_bry.nc
+initial: NRREC  filename
+           -1 
+                          ./output/NESM1km_rst.00101.nc
+restart:          NRST, NRPFRST / filename
+                   21600    1
+                          ./output/NESM1km_rst.nc
+history: LDEFHIS, NWRT, NRPFHIS / filename 
+            T      2160000    10
+                          ./output/NESM1km_his.nc
+averages: NTSAVG, NAVG, NRPFAVG / filename
+          0     21600     1
+                          ./output/NESM1km_avg.nc
+
+primary_history_fields: zeta UBAR VBAR  U  V   wrtT(1:NT)
+                          T    T   T   T  T    30*T
+auxiliary_history_fields:   rho Omega  W  Akv  Akt  Aks Visc3d Diff3d  HBL HBBL Bostr Wstr Ustr Vstr Shfl Swfl rsw rlw lat sen  HEL
+                             F   F     F   F    F   F    F     F       F   F    F     F    F    F    F    F   10*F             
+gls_history_fields:   Akk Akp  TKE  GLS  Lscale
+                       F   F    F     F    F
+
+primary_averages: zeta UBAR VBAR  U  V   wrtT(1:NT)
+                   T    F    F    T  T   30*T
+auxiliary_averages: rho Omega  W  Akv  Akt  Aks  bvf  Visc3d Diff3d HBL HBBL Bostr Wstr Ustr Vstr Shfl Swfl rsw rlw lat sen HEL
+                     F   F     T   T    F    F     F     F      F   T    F     F   F    F     F    F   10*F
+gls_averages:   Akk Akp  TKE  GLS  Lscale
+                  F   F    F     F    F
+
+
+rho0:
+      1025.d0
+
+lateral_visc:   VISC2,    VISC4    [m^2/sec for all]
+                 5.0d0       0.
+
+tracer_diff2: TNU2(1:NT)           [m^2/sec for all]
+               3.3d0 4*3.3d0 
+
+tracer_diff4: TNU4(1:NT)           [m^4/sec for all]
+               2*5.5d+1
+
+vertical_mixing: Akv_bak, Akt_bak [m^2/sec]
+                   1.0d-5    1.0d-6
+
+bottom_drag:     RDRG [m/s],  RDRG2,  Zob [m],  Cdb_min, Cdb_max
+                 3.0d-04      3.0d-3    0.d-3     1.d-4    1.d-1 
+
+gamma2:
+                 1.d0
+
+sponge:          X_SPONGE [m],    V_SPONGE [m^2/sec]
+                    100.e3               1000  
+
+nudg_cof:    TauT_in, TauT_out, TauM_in, TauM_out  [days for all]
+                1.       360.      3.      360.
+
+diagnostics:   ldefdia   nwrtdia    nrpfdia /filename
+                  F        43200         0
+                                 ./cro5_dia.nc
+
+diag_avg: ldefdia_avg  ntsdia_avg  nwrtdia_avg  nprfdia_avg /filename
+               F          1           43200            0
+                                 ./cro5_dia_avg.nc
+
+diag3D_history_fields:    diag_tracers3D(1:NT) 
+                            30*F
+
+diag2D_history_fields:    diag_tracers2D(1:NT)
+                            30*F
+
+diag3D_average_fields:    diag_tracers3D_avg(1:NT)
+                            30*F
+
+diag2D_average_fields:    diag_tracers2D_avg(1:NT)
+                            30*F
+
+diagnosticsM:   ldefdiaM   nwrtdiaM    nrpfdiaM /filename
+                   F          43200          0
+                                 ./cro5_diaM.nc
+
+diagM_avg: ldefdiaM_avg  ntsdiaM_avg  nwrtdiaM_avg  nprfdiaM_avg /filename
+               F          1           43200            0
+                                 ./cro5_diaM_avg.nc
+
+diagM_history_fields: diag_momentum(1:2)
+                            T T
+
+diagM_average_fields: diag_momentum_avg(1:2)
+		            T T
+
+diagnostics_bio:   ldefdiabio   nwrtdiabio    nrpfdiabio /filename
+                        F          43200             0
+                                 ./cro5_diabio.nc
+
+diagbio_avg: ldefdiabio_avg  ntsdiabio_avg  nwrtdiabio_avg  nprfdiabio_avg /filename
+                  F              1              43200              0
+                                 ./cro5_diabio_avg.nc
+
+diagbioFlux_history_fields:    wrtdiabioFlux 
+                                 50*F 
+
+diagbioVSink_history_fields:   wrtdiabioVSink 
+                                 50*F  
+
+diagbioGasExc_history_fields:  wrtdiabioGasExc 
+			                      50*F 
+
+diagbioFlux_average_fields:    wrtdiabioFlux_avg
+                                  50*F   
+
+diagbioVSink_average_fields:   wrtdiabioVSink_avg
+                                  50*F
+
+diagbioGasExc_average_fields:  wrtdiabioGasExc_avg
+			                      50*F
+	
+biology:   forcing file
+           ROMS_FILES/roms_frcbio.nc
+
+sediments: input file
+           sediment.in
+sediment_history_fields: bed_thick bed_poros bed_fra(sand,silt)
+                            T         F        T  T
+
+bbl_history_fields: Abed Hripple Lripple Zbnot Zbapp Bostrw
+                     T      F       F      T     F     T
+
+floats: LDEFFLT, NFLT, NRPFFLT / inpname, hisname
+           T      6      0
+                                   floats.in
+                                   ROMS_FILES/floats.nc
+float_fields:  Grdvar Temp Salt Rho Vel
+                T     T    T    T   T
+
+stations: LDEFSTA, NSTA, NRPFSTA / inpname, hisname
+             T      400      0
+                                    stations.in
+                                    ROMS_FILES/stations.nc
+station_fields:  Grdvar Temp Salt Rho Vel
+                   T     T    T    T   T
+
+psource:   Nsrc  Isrc  Jsrc  Dsrc  Qbar [m3/s]    Lsrc        Tsrc
+            2
+                  3    54     1    200.            T T      5. 0.
+                  3    40     0    200.            T T      5. 0.
+
+psource_ncfile:   Nsrc  Isrc  Jsrc  Dsrc qbardir  Lsrc  Tsrc   runoff file name
+                                  ROMS_FILES/roms_runoff.nc
+                 2
+                        24  35  0  -1   30*T   5.0  0.0
+                        35  13  1  -1   30*T   5.0  0.0
+
+online:    byear  bmonth recordsperday byearend bmonthend / data path
+           2012   7      3             2012     12
+          ./CROCO

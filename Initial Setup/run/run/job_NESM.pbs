@@ -1,0 +1,33 @@
+#!/bin/bash
+#PBS -N NESM_1km
+#PBS -A GT-abracco3-FY20Phase1
+#PBS -l nodes=6:ppn=24
+#PBS -l walltime=04:00:00:00
+#PBS -l mem=64gb
+#PBS -M sdxmonkey@gatech.edu
+#PBS -m abe
+
+module purge
+source ~/.pacemodules_ROMS
+
+ #MYMPI=/usr/local/packages/mpiexec/0.84/mvapich2/bin/mpiexec
+# MYMPI=/usr/local/packages/mvapich2/1.6/gcc-4.4.5/bin/mpirun_rsh
+MYMPI=/usr/local/pacerepov1/mvapich2/2.1/gcc-4.9.0/bin/mpirun
+
+# Change into working directory
+WORKDIR=/storage/home/hcoda1/2/dsun42/scratch/NESM/run/1km_bulk
+#WORKDIR=./
+cd $WORKDIR
+
+# Assign names of exe and input files
+BIN=${WORKDIR}/croco_NESM1km
+echo $BIN
+# INPUT=${WORKDIR}/croco.in.IGW
+INPUT=job_NESM1km.in
+LOG=${WORKDIR}/job_NESM1km_log181206
+
+export LD_LIBRARY_PATH=/usr/local/pacerepov1/mvapich2/2.1/gcc-4.9.0/lib:/usr/local/pacerepov1/netcdf/4.3.3/gcc-4.9.0/lib/:$LD_LIBRARY_PATH
+
+# $MYMPI -np 64 -hostfile ${PBS_NODEFILE} ${BIN} ${INPUT} > $LOG
+mpirun -np 128 -hostfile ${PBS_NODEFILE} ${BIN} ${INPUT} > $LOG
+
